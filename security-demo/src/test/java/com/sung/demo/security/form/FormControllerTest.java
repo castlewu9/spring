@@ -12,6 +12,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -20,6 +21,9 @@ class FormControllerTest {
 
   @Autowired
   MockMvc mockMvc;
+
+  @Autowired
+  ObjectMapper objectMapper;
 
   @Test
   @WithAnonymousUser

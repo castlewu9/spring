@@ -39,5 +39,11 @@ public class FormController {
     model.addAttribute("message", "Hello " + principal.getName());
     return "admin";
   }
+  
+  @GetMapping("/user")
+  String user(Model model, Principal principal) {
+    model.addAttribute("message", "Hello " + principal.getName());
+    return "user";
+  }
 
 }
