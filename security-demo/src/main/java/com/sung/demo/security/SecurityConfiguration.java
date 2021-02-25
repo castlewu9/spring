@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import com.sung.demo.security.user.AccountService;
@@ -21,8 +22,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   private AccountService accountService;
 
-  public SecurityConfiguration(AccountService accountService) {
+  private AccessDeniedHandler accessDeniedHandler;
+
+  public SecurityConfiguration(AccountService accountService,
+      AccessDeniedHandler accessDeniedHandler) {
     this.accountService = accountService;
+    this.accessDeniedHandler = accessDeniedHandler;
   }
 
   public AccessDecisionManager accessDecisionManager() {
@@ -31,7 +36,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
     handler.setRoleHierarchy(roleHierarchy);
-
 
     WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
     webExpressionVoter.setExpressionHandler(handler);
@@ -49,6 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.formLogin().loginPage("/login").permitAll();
     http.logout().logoutSuccessUrl("/");
     http.httpBasic();
+
+    http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
   }
 
   @Override

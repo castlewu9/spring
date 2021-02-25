@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import com.sung.demo.security.handler.DefaultAccessDeniedHandler;
 import com.sung.demo.security.user.AccountRepository;
 import com.sung.demo.security.user.AccountService;
 
@@ -18,6 +20,11 @@ public class ConfigurationBeanFactory {
   @Bean
   PasswordEncoder defaultPasswordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
+
+  @Bean
+  AccessDeniedHandler accessDeniedHandler() {
+    return new DefaultAccessDeniedHandler();
   }
 
 }
