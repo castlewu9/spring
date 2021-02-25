@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
+import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
+import com.sung.demo.security.logger.LoggingFilter;
 import com.sung.demo.security.user.AccountService;
 
 @Configuration
@@ -46,6 +48,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    http.addFilterBefore(new LoggingFilter(), WebAsyncManagerIntegrationFilter.class);
+
     http.authorizeRequests().mvcMatchers("/", "/info", "/account/**", "/signup").permitAll()
         .mvcMatchers("/admin").hasRole("ADMIN").mvcMatchers("/user").hasRole("USER").anyRequest()
         .authenticated().accessDecisionManager(accessDecisionManager());
@@ -53,6 +57,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.formLogin().loginPage("/login").permitAll();
     http.logout().logoutSuccessUrl("/");
     http.httpBasic();
+
+    http.rememberMe().key("remember-me-key");
 
     http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
   }
